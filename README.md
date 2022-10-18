@@ -2,7 +2,7 @@
 
 ## First Steps
 
-'''
+```
 
 from fastapi import FastAPI
 
@@ -13,7 +13,7 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-'''
+```
 
 - Import FastAPI.
 - Create an app instance.
