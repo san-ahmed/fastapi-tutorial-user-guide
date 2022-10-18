@@ -1,20 +1,23 @@
+from enum import Enum
+
 from fastapi import FastAPI
+
+
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
+
 
 myapp = FastAPI()
 
-users = {0:"Ahmed", 1:"Ghassen", 2:"Achref", 3:"Hatem", 4:"Fedi"}
 
-@myapp.get("/users")
-async def read_users():
-    """Endpoint to read users"""
-    return users
+@myapp.get("/models/{model_name}")
+async def read_model(model_name: ModelName):
+    if model_name is ModelName.alexnet:
+        return {"model_name": model_name, "message": "Deep Learning FTW!"}
 
-@myapp.get("/users/me")
-async def read_user_me():
-    """ Endpoint to read the current user."""
-    return {"user": users[0]}
+    if model_name.value == "lenet":
+        return {"model_name": model_name, "message": "LeCNN all the images"}
 
-@myapp.get("/users/{user_id}")
-async def read_user(user_id: int):
-    """ Endpoint to read a user."""
-    return {"user": users[user_id]}
+    return {"model_name": model_name, "message": "Have some residuals"}
