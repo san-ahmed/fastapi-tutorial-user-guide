@@ -73,3 +73,46 @@ async def get_model(model_name: ModelName):
     return {"model_name": model_name, "message": "Have some residuals"}
 
 ```
+
+## Query Parameters
+
+When you declare other function parameters that are not part of the path parameters, they are automatically interpreted as "query" parameters. The query is the set of key-value pairs that go after the `?` in a URL, separated by `&` characters.
+
+As they are part of the URL, they are "naturally" strings. But when you declare them with Python types they are converted to that type and validated against it.-> All the same process that applied for path parameters also applies for query parameters:
+
+   - Editor support (obviously)
+   - Data "parsing"
+   - Data validation
+   - Automatic documentation
+   - You could also use Enums the same way as with Path Parameters.
+
+```
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_user_item(
+    item_id: str, needy: str, skip: int = 0, limit: int | None = None
+):
+    item = {"item_id": item_id, "needy": needy, "skip": skip, "limit": limit}
+    return item
+
+```
+
+In this case, there are 3 query parameters:
+
+   - `needy`, a required `str`.
+   - `skip`, an `int` with a default value of `0`.
+   - `limit`, an optional `int`.
+
+Request URL: `http://127.0.0.1:8000/items/1?needy=Ahmed&limit=10`
+
+Response body: 
+```
+{"item_id": "1",
+  "needy": "Ahmed",
+  "skip": 0,
+  "limit": 10}
+```
